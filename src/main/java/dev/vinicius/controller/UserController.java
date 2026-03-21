@@ -1,0 +1,4 @@
+package dev.vinicius.controller;
+
+public class UserController {
+}
