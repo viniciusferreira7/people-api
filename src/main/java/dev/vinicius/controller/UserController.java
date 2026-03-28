@@ -2,7 +2,7 @@ package dev.vinicius.controller;
 
 import dev.vinicius.dto.UserRequestDto;
 import dev.vinicius.dto.UserResponseDto;
-import dev.vinicius.service.UsersService;
+import dev.vinicius.service.UserService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -19,12 +19,12 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Users", description = "Operations for managing users")
-public class UsersController {
+public class UserController {
 
-    private final UsersService usersService;
+    private final UserService userService;
 
-    public UsersController(UsersService usersService) {
-        this.usersService = usersService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @POST
@@ -34,7 +34,7 @@ public class UsersController {
                     schema = @Schema(implementation = UserResponseDto.class)))
     @APIResponse(responseCode = "400", description = "Invalid request body")
     public Response createUser(UserRequestDto request) {
-        UserResponseDto response = usersService.create(request);
+        UserResponseDto response = userService.create(request);
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
@@ -49,7 +49,7 @@ public class UsersController {
             @Parameter(description = "Number of items per page", example = "10")
             @QueryParam("page_size") @DefaultValue("10") Integer pageSize) {
 
-        List<UserResponseDto> users = usersService.findAll(page, pageSize);
+        List<UserResponseDto> users = userService.findAll(page, pageSize);
         return Response.ok(users).build();
     }
 
@@ -64,7 +64,7 @@ public class UsersController {
             @Parameter(description = "User UUID", required = true)
             @PathParam("id") String userId) {
 
-        return usersService.findById(userId)
+        return userService.findById(userId)
                 .map(user -> Response.ok(user).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
