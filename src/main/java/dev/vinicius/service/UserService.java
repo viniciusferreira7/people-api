@@ -9,13 +9,14 @@ import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @ApplicationScoped
-public class UsersService {
+public class UserService {
 
     private final UserMapper userMapper;
 
-    public UsersService(UserMapper userMapper) {
+    public UserService(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
 
@@ -42,7 +43,7 @@ public class UsersService {
     }
 
     public Optional<UserResponseDto> findById(String userId) {
-        User user = User.findById(userId);
+        User user = User.findById(UUID.fromString(userId));
         return Optional.ofNullable(user).map(userMapper::toResponse);
     }
 }
