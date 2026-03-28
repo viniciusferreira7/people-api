@@ -2,81 +2,62 @@
 
 > ⚠️ **Work In Progress** - This project is currently under active development.
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+A REST API for managing people, built with Quarkus and MySQL.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Tech Stack
 
-## Running the application in dev mode
+- **Quarkus 3.32.3** — Supersonic Subatomic Java Framework
+- **Hibernate ORM with Panache** — persistence via active record pattern
+- **MySQL** — relational database
+- **SmallRye OpenAPI** — API documentation with Swagger UI
+- **Jackson** — JSON serialization
 
-You can run your application in dev mode that enables live coding using:
+## Endpoints
 
-```shell script
+| Method | Path              | Description          |
+|--------|-------------------|----------------------|
+| POST   | `/api/users`      | Create a user        |
+| GET    | `/api/users`      | List users (paginated) |
+| GET    | `/api/users/{id}` | Find user by UUID    |
+
+### Query parameters for `GET /api/users`
+
+| Param       | Default | Description              |
+|-------------|---------|--------------------------|
+| `page`      | `1`     | Page number (1-based)    |
+| `page_size` | `10`    | Number of items per page |
+
+## Running in dev mode
+
+Requires Docker (Dev Services will start a MySQL container automatically).
+
+```shell
 ./mvnw quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+- API: <http://localhost:8080/api/users>
+- Swagger UI: <http://localhost:8080/q/swagger-ui>
+- Dev UI: <http://localhost:8080/q/dev>
 
-## Packaging and running the application
+## Packaging
 
-The application can be packaged using:
-
-```shell script
+```shell
 ./mvnw package
+java -jar target/quarkus-app/quarkus-run.jar
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Über-jar:
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
+```shell
 ./mvnw package -Dquarkus.package.jar.type=uber-jar
+java -jar target/*-runner.jar
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+## Native executable
 
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
+```shell
 ./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
+# or, without GraalVM installed:
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
+./target/people-api-1.0.0-SNAPSHOT-runner
 ```
-
-You can then execute your native executable with: `./target/people-api-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- JDBC Driver - MySQL ([guide](https://quarkus.io/guides/datasource)): Connect to the MySQL database via JDBC
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
