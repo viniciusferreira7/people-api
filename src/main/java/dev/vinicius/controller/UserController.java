@@ -64,16 +64,24 @@ public class UserController {
     public Response findById(
             @Parameter(description = "User UUID", required = true)
             @PathParam("id") String userId) {
-        UserResponseDto userResponseDto = userService.findById(userId);
+        UserResponseDto userResponseDto = userService.findById(UUID.fromString(userId));
 
-        return Response.ok(userService.findById(userId)).build();
+        return Response.ok(userResponseDto).build();
     }
 
     @PATCH
     @Path("/{id}")
-    public Response updateUser( @PathParam("id") String userId, UserRequestDto request){
+    public Response update( @PathParam("id") String userId, UserRequestDto request){
         UserResponseDto userResponseDto = this.userService.update(UUID.fromString(userId), request);
 
         return Response.status(Response.Status.OK).entity(userResponseDto).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response delete(@PathParam("id") String userId){
+        this.userService.delete(UUID.fromString(userId));
+
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }

@@ -44,8 +44,8 @@ public class UserService {
                 .toList();
     }
 
-    public UserResponseDto findById(String userId) {
-        Optional<User> user = User.findByIdOptional(UUID.fromString(userId));
+    public UserResponseDto findById(UUID userId) {
+        Optional<User> user = User.findByIdOptional(userId);
         return user.map(userMapper::toResponse)
                 .orElseThrow(UserNotFoundException::new);
     }
@@ -65,6 +65,16 @@ public class UserService {
 
         user.setName(request.name);
         user.setEmail(request.email);
+
+        return userMapper.toResponse(user);
+    }
+
+    @Transactional
+    public UserResponseDto delete(UUID userId) {
+        User user = (User) User.findByIdOptional(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+       User.deleteById(userId);
 
         return userMapper.toResponse(user);
     }
