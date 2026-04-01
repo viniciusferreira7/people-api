@@ -3,6 +3,7 @@ package dev.vinicius.service;
 import dev.vinicius.dto.UserRequestDto;
 import dev.vinicius.dto.UserResponseDto;
 import dev.vinicius.entity.User;
+import dev.vinicius.exception.UserNotFoundException;
 import dev.vinicius.mapper.UserMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -42,8 +43,9 @@ public class UserService {
                 .toList();
     }
 
-    public Optional<UserResponseDto> findById(String userId) {
-        User user = User.findById(UUID.fromString(userId));
-        return Optional.ofNullable(user).map(userMapper::toResponse);
+    public UserResponseDto findById(String userId) {
+        Optional<User> user = User.findByIdOptional(UUID.fromString(userId));
+        return user.map(userMapper::toResponse)
+                .orElseThrow(UserNotFoundException::new);
     }
 }

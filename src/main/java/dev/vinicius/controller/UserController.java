@@ -63,9 +63,8 @@ public class UserController {
     public Response findById(
             @Parameter(description = "User UUID", required = true)
             @PathParam("id") String userId) {
+        UserResponseDto userResponseDto = userService.findById(userId);
 
-        return userService.findById(userId)
-                .map(user -> Response.ok(user).build())
-                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+        return Response.ok(userService.findById(userId)).build();
     }
 }
