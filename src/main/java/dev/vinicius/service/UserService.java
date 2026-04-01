@@ -3,6 +3,7 @@ package dev.vinicius.service;
 import dev.vinicius.dto.UserRequestDto;
 import dev.vinicius.dto.UserResponseDto;
 import dev.vinicius.entity.User;
+import dev.vinicius.exception.EmailAlreadyTakenException;
 import dev.vinicius.exception.UserNotFoundException;
 import dev.vinicius.mapper.UserMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -47,5 +48,24 @@ public class UserService {
         Optional<User> user = User.findByIdOptional(UUID.fromString(userId));
         return user.map(userMapper::toResponse)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Transactional
+    public UserResponseDto update(UUID userId, UserRequestDto request) {
+
+        User user = (User) User.findByIdOptional(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        Optional<User> userWithSameEmail = User.find("email", request.email)
+                .firstResultOptional();
+
+        if (userWithSameEmail.isPresent() && !userWithSameEmail.get().id.equals(userId)) {
+            throw new EmailAlreadyTakenException();
+        }
+
+        user.setName(request.name);
+        user.setEmail(request.email);
+
+        return userMapper.toResponse(user);
     }
 }

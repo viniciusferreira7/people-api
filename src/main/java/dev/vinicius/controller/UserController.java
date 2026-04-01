@@ -14,6 +14,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import java.util.List;
+import java.util.UUID;
 
 @Path("/api/users")
 @Produces(MediaType.APPLICATION_JSON)
@@ -66,5 +67,13 @@ public class UserController {
         UserResponseDto userResponseDto = userService.findById(userId);
 
         return Response.ok(userService.findById(userId)).build();
+    }
+
+    @PATCH
+    @Path("/{id}")
+    public Response updateUser( @PathParam("id") String userId, UserRequestDto request){
+        UserResponseDto userResponseDto = this.userService.update(UUID.fromString(userId), request);
+
+        return Response.status(Response.Status.OK).entity(userResponseDto).build();
     }
 }

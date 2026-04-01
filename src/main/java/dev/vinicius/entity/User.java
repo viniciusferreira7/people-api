@@ -28,4 +28,12 @@ public class User extends PanacheEntityBase {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = true)
     public LocalDateTime updatedAt;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
