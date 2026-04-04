@@ -1,7 +1,5 @@
 # people-api
 
-> ⚠️ **Work In Progress** - This project is currently under active development.
-
 A REST API for managing people, built with Quarkus and MySQL.
 
 ## Tech Stack
