@@ -71,7 +71,15 @@ public class UserController {
 
     @PATCH
     @Path("/{id}")
-    public Response update( @PathParam("id") String userId, UserRequestDto request){
+    @Operation(summary = "Update a user", description = "Updates an existing user by their UUID")
+    @APIResponse(responseCode = "200", description = "User updated",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = UserResponseDto.class)))
+    @APIResponse(responseCode = "400", description = "Invalid request body")
+    @APIResponse(responseCode = "404", description = "User not found")
+    public Response update(
+            @Parameter(description = "User UUID", required = true)
+            @PathParam("id") String userId, UserRequestDto request){
         UserResponseDto userResponseDto = this.userService.update(UUID.fromString(userId), request);
 
         return Response.status(Response.Status.OK).entity(userResponseDto).build();
@@ -79,7 +87,12 @@ public class UserController {
 
     @DELETE
     @Path("/{id}")
-    public Response delete(@PathParam("id") String userId){
+    @Operation(summary = "Delete a user", description = "Deletes an existing user by their UUID")
+    @APIResponse(responseCode = "204", description = "User deleted")
+    @APIResponse(responseCode = "404", description = "User not found")
+    public Response delete(
+            @Parameter(description = "User UUID", required = true)
+            @PathParam("id") String userId){
         this.userService.delete(UUID.fromString(userId));
 
         return Response.status(Response.Status.NO_CONTENT).build();
