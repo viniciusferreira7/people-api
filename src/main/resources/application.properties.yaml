@@ -5,6 +5,9 @@ quarkus:
     password: ${MYSQL_PASSWORD}
     jdbc:
       url: jdbc:mysql://localhost:${MYSQL_PORT:3306}/${MYSQL_DATABASE}
+  flyway:
+    migrate-at-start: true
+    locations: db/migration
   hibernate-orm:
     database:
-      generation: update
+      generation: none
