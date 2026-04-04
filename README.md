@@ -19,6 +19,8 @@ A REST API for managing people, built with Quarkus and MySQL.
 | POST   | `/api/users`      | Create a user        |
 | GET    | `/api/users`      | List users (paginated) |
 | GET    | `/api/users/{id}` | Find user by UUID    |
+| PATCH  | `/api/users/{id}` | Update a user        |
+| DELETE | `/api/users/{id}` | Delete a user        |
 
 ### Query parameters for `GET /api/users`
 
